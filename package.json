@@ -1,0 +1,23 @@
+{
+  "name": "misconceptionos",
+  "version": "1.0.0",
+  "description": "An intelligent pedagogical diagnostic system analyzing student reasoning, identifying conceptual misconceptions, providing targeted Socratic interventions, and verifying transfer recovery.",
+  "main": "app.js",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "serve": "npx -y serve . -l 8080",
+    "test": "node scratch/test_full_suite.js",
+    "lint": "node -c app.js"
+  },
+  "keywords": [
+    "education",
+    "pedagogy",
+    "misconceptions",
+    "socratic-intervention",
+    "learning-analytics",
+    "data-structures",
+    "computer-science"
+  ],
+  "author": "Insight Innovation",
+  "license": "MIT"
+}

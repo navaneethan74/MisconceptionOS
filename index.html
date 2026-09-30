@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MisconceptionOS — Understand the mistake. Correct the reasoning. Verify the learning.</title>
+  <meta name="description" content="An intelligent learning system that analyzes student reasoning, identifies conceptual misconceptions, provides guided Socratic intervention, and verifies learning.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="#landing" class="brand" id="nav-brand">
+        <span class="brand-dot"></span>
+        MisconceptionOS
+      </a>
+
+      <!-- Dynamic Navigation Links -->
+      <ul class="nav-links" id="main-nav-links">
+        <!-- Rendered dynamically according to user session & role -->
+      </ul>
+
+      <!-- User Auth State Badge -->
+      <div class="nav-user-badge" id="nav-user-badge">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="main-wrapper">
+
+    <!-- ====================================================================
+         PUBLIC VIEW 1: LANDING PAGE
+         ==================================================================== -->
+    <section id="view-landing" class="view-section active">
+      <div class="landing-hero">
+        <div class="landing-brand">MisconceptionOS</div>
+        <h1 class="landing-tagline">
+          Understand how you think.
+        </h1>
+        <p class="landing-description">
+          Bring your own question. Share your answer and reasoning. Discover what your reasoning reveals.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn-primary" id="btn-hero-get-started">Analyze My Understanding</button>
+          <button class="btn-secondary" id="btn-hero-login">Log In</button>
+        </div>
+      </div>
+
+      <!-- How It Works Section -->
+      <div class="landing-section">
+        <h2 class="landing-section-title">How It Works</h2>
+        <p class="landing-section-subtitle">A pedagogical closed-loop architecture designed for deep conceptual recovery.</p>
+
+        <div class="how-it-works-grid">
+          <div class="how-card">
+            <div class="how-num">01</div>
+            <h3 class="how-title">Ask</h3>
+            <p class="how-desc">
+              Bring a question you're trying to understand.
+            </p>
+          </div>
+
+          <div class="how-card">
+            <div class="how-num">02</div>
+            <h3 class="how-title">Explain</h3>
+            <p class="how-desc">
+              Give What is your answer? and explain why you think it is correct.
+            </p>
+          </div>
+
+          <div class="how-card">
+            <div class="how-num">03</div>
+            <h3 class="how-title">Discover</h3>
+            <p class="how-desc">
+              MisconceptionOS analyzes your reasoning and identifies gaps or misconceptions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Audience Breakdown -->
+        <div class="roles-grid">
+          <div class="role-highlight-card">
+            <div class="role-highlight-label">For Students</div>
+            <h3 class="role-highlight-title">Understand Your Mistakes</h3>
+            <p class="role-highlight-desc">
+              Understand your mistakes and improve your reasoning. Build intuition that transfers across multiple data structures.
+            </p>
+          </div>
+
+          <div class="role-highlight-card">
+            <div class="role-highlight-label">For Teachers</div>
+            <h3 class="role-highlight-title">Actionable Pedagogical Visibility</h3>
+            <p class="role-highlight-desc">
+              See what students misunderstand, why they misunderstand it, and whether they recover with complete reasoning audit trails.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PUBLIC VIEW 2: LOGIN
+         ==================================================================== -->
+    <section id="view-login" class="view-section">
+      <div class="auth-container">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to your MisconceptionOS account</p>
+
+        <div class="auth-error-box" id="login-error-box"></div>
+
+        <form id="form-login">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="text-input" placeholder="name@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="text-input" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem;" id="btn-submit-login">
+            Sign In
+          </button>
+
+          <div style="margin-top: 1.15rem; padding-top: 1rem; border-top: 1px dashed var(--border-light); text-align: center;">
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 500;">Reviewer Access (Pre-Configured Accounts):</p>
+            <div style="display: flex; gap: 0.5rem; justify-content: center;">
+              <button type="button" class="btn-secondary" id="btn-demo-student" style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
+                Student Account
+              </button>
+              <button type="button" class="btn-secondary" id="btn-demo-teacher" style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
+                Teacher Account
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="auth-footer">
+          Don't have an account? <a href="#signup" id="link-goto-signup">Sign up</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PUBLIC VIEW 3: SIGNUP
+         ==================================================================== -->
+    <section id="view-signup" class="view-section">
+      <div class="auth-container">
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Join MisconceptionOS as a Student or Teacher</p>
+
+        <div class="auth-error-box" id="signup-error-box"></div>
+
+        <form id="form-signup">
+          <div class="form-group">
+            <label class="form-label">I am registering as:</label>
+            <div class="role-selector-toggle">
+              <div class="role-option selected" id="role-opt-student" data-role="student">
+                Student
+              </div>
+              <div class="role-option" id="role-opt-teacher" data-role="teacher">
+                Teacher
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" class="text-input" placeholder="e.g. Alex Rivera" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" class="text-input" placeholder="alex@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-password">Password (min. 6 characters)</label>
+            <input type="password" id="signup-password" class="text-input" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required autocomplete="new-password" minlength="6">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-confirm-password">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" class="text-input" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required autocomplete="new-password">
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem;" id="btn-submit-signup">
+            Create Account
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="#login" id="link-goto-login">Sign in</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED STUDENT VIEW 1: HOME
+         ==================================================================== -->
+    <section id="view-student-home" class="view-section">
+      <div class="welcome-banner">
+        <h2 class="welcome-greeting" id="student-greeting">Welcome back, Student</h2>
+        <p class="welcome-sub">
+          Continue your diagnostic practice to identify conceptual misconceptions, strengthen your mental models, and verify recovery.
+        </p>
+      </div>
+
+      <div class="home-grid">
+        <div class="home-main-col">
+          <div class="card">
+            <h3 class="card-section-label">Your Diagnostic Activity</h3>
+            <div id="student-home-continue-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-section-label">Recent Analysis</h3>
+            <div class="recommended-list" id="student-home-recommended-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <div class="home-side-col">
+          <div class="card">
+            <h3 class="card-section-label">Learning Summary</h3>
+            <div id="student-home-summary-box">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED STUDENT VIEW 2: PRACTICE
+         ==================================================================== -->
+    <section id="view-practice" class="view-section">
+      <div id="practice-topics-view" style="display: none;"></div>
+
+      <!-- 2. PRACTICE QUESTION WORKSPACE VIEW -->
+      <div id="practice-workspace-view" class="practice-workspace-container">
+
+        <!-- Reviewer Sample Cases -->
+        <div class="card" style="margin-bottom: 1.5rem; background: var(--bg-subtle); border: 1px solid var(--border-light);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.65rem;">
+            <div>
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.2rem;">Try a sample case</h3>
+              <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 0;">Explore how MisconceptionOS responds to different types of learner reasoning.</p>
+            </div>
+            <span style="font-size: 0.75rem; background: var(--pastel-blue-bg); color: var(--pastel-blue-text); padding: 0.2rem 0.55rem; border-radius: 4px; font-weight: 600;">1-Click Pre-fill</span>
+          </div>
+
+          <div class="sample-cases-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.65rem; margin-top: 0.75rem;">
+            <button type="button" class="btn-sample-case" data-case="1" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase;">1. Correct Understanding</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Queue FIFO Principle</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Understanding demonstrated</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="2" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #D97706; text-transform: uppercase;">2. Reasoning Gap</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Binary Search Sorted Array</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Reasoning gap / misconception</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="3" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #7C3AED; text-transform: uppercase;">3. Answer Known, Reasoning Unknown</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Primary Key Purpose</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Answer understood, reasoning gap</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="4" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #2563EB; text-transform: uppercase;">4. Knowledge Gap</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Overfitting in ML</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Knowledge gap (correct explanation)</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="5" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #DC2626; text-transform: uppercase;">5. Wrong Answer + Wrong Reasoning</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Binary Search Complexity</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Search-space reduction misconception</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="6" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #0284C7; text-transform: uppercase;">6. Correct Answer + Low Confidence</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Primary Key Distinguishability</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Correct understanding (low confidence)</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="7a" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #9333EA; text-transform: uppercase;">7a. Recurring Misconception (Part 1)</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">ML Training vs Unseen Data</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Generalization / memorization misconception</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="7b" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #9333EA; text-transform: uppercase;">7b. Recurring Misconception (Part 2)</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Testing Model on Unseen Data</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Cross-question recurring pattern</div>
+            </button>
+
+            <button type="button" class="btn-sample-case" data-case="8" style="text-align: left; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s ease;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #EA580C; text-transform: uppercase;">8. Different Reasoning, Same Answer</div>
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Primary Key for Row Deletion</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Expected: Flawed rationale despite correct answer</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="card" id="practice-question-card">
+          <form id="practice-form">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label class="form-label" for="user-custom-question">
+                What are you trying to understand?
+              </label>
+              <textarea id="user-custom-question" class="text-area" placeholder="Enter your question..." required style="font-size: 1.1rem; min-height: 80px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="practice-answer-input">
+                What is your answer?
+                
+              </label>
+              <input type="text" id="practice-answer-input" class="text-input" placeholder="Write your answer in your own words..." required autocomplete="off">
+              <div style="margin-top: 0.45rem;">
+                <button type="button" class="btn-unknown-action" id="btn-unknown-answer">
+                  &#10067; I don't know the answer
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.15rem;">
+              <label class="form-label" for="practice-reasoning-input">
+                Why do you think this is the answer?
+                
+              </label>
+              <textarea id="practice-reasoning-input" class="text-area" placeholder="Explain your reasoning in your own words..." required></textarea>
+              <div style="margin-top: 0.45rem;">
+                <button type="button" class="btn-unknown-action" id="btn-unknown-reasoning">
+                  &#10067; I don't know why
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.15rem;">
+              <label class="form-label" for="practice-confidence-input">
+                How confident are you? (Optional)
+              </label>
+              <select id="practice-confidence-input" class="text-input" style="width: 100%; max-width: 300px; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background-color: #fff;">
+                <option value="">Select confidence...</option>
+                <option value="not_sure">Not sure</option>
+                <option value="somewhat">Somewhat confident</option>
+                <option value="very_confident">Very confident</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem;">
+              <span style="font-size: 0.78rem; color: var(--text-muted);">
+                Your reasoning is analyzed to identify the underlying mental model
+              </span>
+              <button type="submit" class="btn-primary" id="btn-submit-practice">
+                Analyze My Understanding
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Interactive Results & Socratic Intervention Container -->
+        <div id="practice-interactive-container"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED STUDENT VIEW 3: PROGRESS
+         ==================================================================== -->
+    <section id="view-progress" class="view-section">
+      <div id="student-progress-view-root">
+        <!-- Rendered by ProgressController -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED STUDENT VIEW 4: PROFILE
+         ==================================================================== -->
+    <section id="view-student-profile" class="view-section">
+      <div class="auth-container" style="max-width: 520px;">
+        <h2 class="auth-title">Student Profile</h2>
+        <p class="auth-subtitle">Account and diagnostic configuration</p>
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="text-input" id="profile-name" style="background: var(--bg-subtle);">Student Name</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="text-input" id="profile-email" style="background: var(--bg-subtle);">student@example.com</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Account Role</label>
+          <div>
+            <span class="role-pill pill-student">Student Account</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; border-top: 1px solid var(--border-light); padding-top: 1.25rem;">
+          <button class="btn-secondary" id="btn-profile-logout" style="width: 100%;">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED TEACHER VIEW 1: DASHBOARD
+         ==================================================================== -->
+    <section id="view-teacher-dashboard" class="view-section">
+      <div id="teacher-dashboard-view-root">
+        <!-- Rendered by TeacherController -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED TEACHER VIEW 2: STUDENTS DIRECTORY
+         ==================================================================== -->
+    <section id="view-teacher-students" class="view-section">
+      <div id="teacher-students-view-root">
+        <!-- Rendered by TeacherController -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED TEACHER VIEW 3: STUDENT DETAIL DOSSIER
+         ==================================================================== -->
+    <section id="view-teacher-student-detail" class="view-section">
+      <div id="teacher-student-detail-view-root">
+        <!-- Rendered by TeacherController -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED TEACHER VIEW 4: MISCONCEPTIONS
+         ==================================================================== -->
+    <section id="view-teacher-misconceptions" class="view-section">
+      <div id="teacher-misconceptions-view-root">
+        <!-- Rendered by TeacherController -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         AUTHENTICATED TEACHER VIEW 5: PROFILE
+         ==================================================================== -->
+    <section id="view-teacher-profile" class="view-section">
+      <div class="auth-container" style="max-width: 520px;">
+        <h2 class="auth-title">Teacher Profile</h2>
+        <p class="auth-subtitle">Educator credentials and diagnostic permissions</p>
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="text-input" id="teacher-profile-name" style="background: var(--bg-subtle);">Prof. Eleanor Vance</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="text-input" id="teacher-profile-email" style="background: var(--bg-subtle);">teacher@misconceptionos.edu</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Account Role</label>
+          <div>
+            <span class="role-pill pill-teacher">Teacher / Diagnostic Reviewer</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; border-top: 1px solid var(--border-light); padding-top: 1.25rem;">
+          <button class="btn-secondary" id="btn-teacher-profile-logout" style="width: 100%;">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         FALLBACK VIEW: 404 / NOT FOUND
+         ==================================================================== -->
+    <section id="view-not-found" class="view-section">
+      <div class="empty-progress-box">
+        <div class="empty-icon">&#128269;</div>
+        <h2 class="empty-title">Page Not Found</h2>
+        <p class="empty-desc">The requested section does not exist or you do not have permission to view it.</p>
+        <button class="btn-primary" id="btn-not-found-home" style="margin-top: 1.25rem;">
+          Return to Home
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Loading Overlay -->
+  <div class="loading-overlay" id="global-loading">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <span class="loading-text" id="global-loading-text">Analyzing your reasoning...</span>
+    </div>
+  </div>
+
+  <!-- Global Notification Toast -->
+  <div class="toast" id="global-toast">Notification message</div>
+
+  <!-- Master Application Script -->
+  <script src="app.js"></script>
+</body>
+</html>
