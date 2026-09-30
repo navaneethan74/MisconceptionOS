@@ -1773,49 +1773,51 @@
       const teacherEmail = 'teacher@misconceptionos.edu';
       const studentEmail = 'student@misconceptionos.edu';
 
-      return new Promise((resolve) => {
-        try {
-          const tx = this.db.transaction(['profiles', 'learner_state', 'misconceptions', 'interactions', 'recovery_results'], 'readwrite');
-          const pStore = tx.objectStore('profiles');
-          const sStore = tx.objectStore('learner_state');
-          const mStore = tx.objectStore('misconceptions');
-          const iStore = tx.objectStore('interactions');
-          const rStore = tx.objectStore('recovery_results');
-          const index = pStore.index('email');
+      try {
+        const teacherCreds = await this.hashPassword('TeacherPass123!');
+        const studentCreds = await this.hashPassword('StudentPass123!');
 
-          // 1. Seed Teacher
-          const tReq = index.get(teacherEmail);
-          tReq.onsuccess = async () => {
-            if (!tReq.result) {
-              const { hashHex, saltHex } = await this.hashPassword('TeacherPass123!');
-              const teacherProfile = {
-                id: 'usr_teacher_demo',
-                user_id: 'usr_teacher_demo',
-                full_name: 'Prof. Eleanor Vance',
-                email: teacherEmail,
-                password_hash: hashHex,
-                salt: saltHex,
-                role: 'teacher',
-                created_at: Date.now() - (7 * 24 * 60 * 60 * 1000)
-              };
-              try { pStore.add(teacherProfile); } catch (e) {}
-            }
+        return new Promise((resolve) => {
+          try {
+            const tx = this.db.transaction(['profiles', 'learner_state', 'misconceptions', 'interactions', 'recovery_results'], 'readwrite');
+            const pStore = tx.objectStore('profiles');
+            const sStore = tx.objectStore('learner_state');
+            const mStore = tx.objectStore('misconceptions');
+            const iStore = tx.objectStore('interactions');
+            const rStore = tx.objectStore('recovery_results');
+            const index = pStore.index('email');
 
-            // 2. Seed Student
-            const sReq = index.get(studentEmail);
-            sReq.onsuccess = async () => {
-              if (!sReq.result) {
-                const { hashHex, saltHex } = await this.hashPassword('StudentPass123!');
-                const studentProfile = {
-                  id: 'usr_student_demo',
-                  user_id: 'usr_student_demo',
-                  full_name: 'Alex Rivera',
-                  email: studentEmail,
-                  password_hash: hashHex,
-                  salt: saltHex,
-                  role: 'student',
-                  created_at: Date.now() - (3 * 24 * 60 * 60 * 1000)
+            // 1. Seed Teacher
+            const tReq = index.get(teacherEmail);
+            tReq.onsuccess = () => {
+              if (!tReq.result) {
+                const teacherProfile = {
+                  id: 'usr_teacher_demo',
+                  user_id: 'usr_teacher_demo',
+                  full_name: 'Prof. Eleanor Vance',
+                  email: teacherEmail,
+                  password_hash: teacherCreds.hashHex,
+                  salt: teacherCreds.saltHex,
+                  role: 'teacher',
+                  created_at: Date.now() - (7 * 24 * 60 * 60 * 1000)
                 };
+                try { pStore.add(teacherProfile); } catch (e) {}
+              }
+
+              // 2. Seed Student
+              const sReq = index.get(studentEmail);
+              sReq.onsuccess = () => {
+                if (!sReq.result) {
+                  const studentProfile = {
+                    id: 'usr_student_demo',
+                    user_id: 'usr_student_demo',
+                    full_name: 'Alex Rivera',
+                    email: studentEmail,
+                    password_hash: studentCreds.hashHex,
+                    salt: studentCreds.saltHex,
+                    role: 'student',
+                    created_at: Date.now() - (3 * 24 * 60 * 60 * 1000)
+                  };
                 try {
                   pStore.add(studentProfile);
                   sStore.add({
@@ -1891,6 +1893,9 @@
           resolve();
         }
       });
+      } catch (err) {
+        // Fallback for environment without WebCrypto
+      }
     }
 
     async insert(storeName, data) {
@@ -4047,55 +4052,59 @@ Confidence: "${confidence || 'unspecified'}"`;
 
     async checkRecurringMisconception(userId, currentConcept, misconceptionKey, semanticCategory = '', reasoning = '') {
       if (!userId) return { isRecurring: false };
-      const history = await db.getMisconceptions(userId);
-      if (!history || history.length === 0) return { isRecurring: false };
+      try {
+        const history = await db.getMisconceptions(userId);
+        if (!history || history.length === 0) return { isRecurring: false };
 
-      const reasLower = (reasoning || '').toLowerCase();
-      const priorMatch = history.find(m => {
-        if (misconceptionKey && m.misconception_key === misconceptionKey) return true;
-        if (semanticCategory && m.semantic_category && m.semantic_category === semanticCategory) return true;
-        
-        // Semantic cross-concept check: Confusing abstract behavior with implementation-specific error handling
-        const isCurrentImpl = (misconceptionKey && misconceptionKey.includes('abstract_vs_implementation')) ||
-                              semanticCategory === 'implementation_vs_abstraction' ||
-                              reasLower.includes('-1') || reasLower.includes('negative one') || reasLower.includes('error code');
-        const mEvid = typeof m.evidence === 'string' ? m.evidence.toLowerCase() : JSON.stringify(m.evidence || '').toLowerCase();
-        const isPriorImpl = (m.misconception_key && m.misconception_key.includes('abstract_vs_implementation')) ||
-                            m.semantic_category === 'implementation_vs_abstraction' ||
-                            mEvid.includes('-1') || mEvid.includes('negative one');
+        const reasLower = (reasoning || '').toLowerCase();
+        const priorMatch = history.find(m => {
+          if (misconceptionKey && m.misconception_key === misconceptionKey) return true;
+          if (semanticCategory && m.semantic_category && m.semantic_category === semanticCategory) return true;
+          
+          // Semantic cross-concept check: Confusing abstract behavior with implementation-specific error handling
+          const isCurrentImpl = (misconceptionKey && misconceptionKey.includes('abstract_vs_implementation')) ||
+                                semanticCategory === 'implementation_vs_abstraction' ||
+                                reasLower.includes('-1') || reasLower.includes('negative one') || reasLower.includes('error code');
+          const mEvid = typeof m.evidence === 'string' ? m.evidence.toLowerCase() : JSON.stringify(m.evidence || '').toLowerCase();
+          const isPriorImpl = (m.misconception_key && m.misconception_key.includes('abstract_vs_implementation')) ||
+                              m.semantic_category === 'implementation_vs_abstraction' ||
+                              mEvid.includes('-1') || mEvid.includes('negative one');
 
-        if (isCurrentImpl && isPriorImpl) return true;
+          if (isCurrentImpl && isPriorImpl) return true;
 
-        // Generalization vs training memorization check
-        const isCurrentGen = (misconceptionKey && misconceptionKey.includes('generalization')) ||
-                             semanticCategory === 'generalization_vs_memorization' ||
-                             reasLower.includes('training accuracy') || reasLower.includes('training data');
-        const isPriorGen = (m.misconception_key && m.misconception_key.includes('generalization')) ||
-                           m.semantic_category === 'generalization_vs_memorization' ||
-                           mEvid.includes('training accuracy') || mEvid.includes('training data');
+          // Generalization vs training memorization check
+          const isCurrentGen = (misconceptionKey && misconceptionKey.includes('generalization')) ||
+                               semanticCategory === 'generalization_vs_memorization' ||
+                               reasLower.includes('training accuracy') || reasLower.includes('training data');
+          const isPriorGen = (m.misconception_key && m.misconception_key.includes('generalization')) ||
+                             m.semantic_category === 'generalization_vs_memorization' ||
+                             mEvid.includes('training accuracy') || mEvid.includes('training data');
 
-        if (isCurrentGen && isPriorGen) return true;
+          if (isCurrentGen && isPriorGen) return true;
 
-        return false;
-      });
+          return false;
+        });
 
-      if (priorMatch) {
-        const synthesisMessage = (semanticCategory === 'generalization_vs_memorization' || (misconceptionKey && misconceptionKey.includes('generalization')))
-          ? "Equating high training performance or memorization with true generalizable machine learning across multiple questions."
-          : (semanticCategory === 'implementation_vs_abstraction' || (misconceptionKey && misconceptionKey.includes('abstract_vs_implementation')))
-          ? "Confusing abstract data-structure behavior with implementation-specific error handling."
-          : `Repeatedly confusing underlying abstract invariants with physical memory layout across ${priorMatch.concept} and ${currentConcept}.`;
+        if (priorMatch) {
+          const synthesisMessage = (semanticCategory === 'generalization_vs_memorization' || (misconceptionKey && misconceptionKey.includes('generalization')))
+            ? "Equating high training performance or memorization with true generalizable machine learning across multiple questions."
+            : (semanticCategory === 'implementation_vs_abstraction' || (misconceptionKey && misconceptionKey.includes('abstract_vs_implementation')))
+            ? "Confusing abstract data-structure behavior with implementation-specific error handling."
+            : `Repeatedly confusing underlying abstract invariants with physical memory layout across ${priorMatch.concept} and ${currentConcept}.`;
 
-        return {
-          isRecurring: true,
-          previousConcept: priorMatch.concept,
-          misconceptionKey: misconceptionKey || priorMatch.misconception_key,
-          underlyingConcept: priorMatch.underlying_concept || 'Abstract Data Structure Invariant',
-          title: priorMatch.title || 'Recurring Conceptual Invariant Confusion',
-          previousEvidence: priorMatch.evidence || { reasoning: 'Prior attempt exhibited similar rule confusion' },
-          message: `We noticed a similar reasoning pattern in your earlier ${priorMatch.concept} evaluation.`,
-          synthesis: synthesisMessage
-        };
+          return {
+            isRecurring: true,
+            previousConcept: priorMatch.concept,
+            misconceptionKey: misconceptionKey || priorMatch.misconception_key,
+            underlyingConcept: priorMatch.underlying_concept || 'Abstract Data Structure Invariant',
+            title: priorMatch.title || 'Recurring Conceptual Invariant Confusion',
+            previousEvidence: priorMatch.evidence || { reasoning: 'Prior attempt exhibited similar rule confusion' },
+            message: `We noticed a similar reasoning pattern in your earlier ${priorMatch.concept} evaluation.`,
+            synthesis: synthesisMessage
+          };
+        }
+      } catch (err) {
+        console.warn('Notice checking recurring misconceptions:', err);
       }
       return { isRecurring: false };
     }
@@ -5032,11 +5041,13 @@ Confidence: "${confidence || 'unspecified'}"`;
       let targetId = viewId;
       if (targetId === 'analyze') targetId = 'practice';
       if (targetId === 'history') targetId = 'progress';
-      Object.keys(this.views).forEach(key => {
-        if (this.views[key]) {
-          this.views[key].classList.toggle('active', key === targetId);
-        }
+
+      const targetEl = this.views[targetId];
+      const allSections = document.querySelectorAll('.view-section');
+      allSections.forEach(sec => {
+        sec.classList.toggle('active', sec === targetEl);
       });
+
       this.updateActiveNavLink();
       window.scrollTo(0, 0);
     }
@@ -6164,10 +6175,10 @@ Confidence: "${confidence || 'unspecified'}"`;
       this.setIsAnalyzing(true);
 
       try {
-        let diagnosis;
+        let diagnosis = null;
         try {
           const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('timeout')), 8000);
+            setTimeout(() => reject(new Error('timeout')), 5000);
           });
           diagnosis = await Promise.race([
             diagnosticEngine.diagnoseCustom(
@@ -6180,14 +6191,14 @@ Confidence: "${confidence || 'unspecified'}"`;
             timeoutPromise
           ]);
         } catch (error) {
-          console.error("Diagnosis error / timeout:", error);
-          this.showToast("Analysis unavailable. Please try again.");
-          return;
+          console.warn("Diagnosis timeout or error, falling back to local semantic engine:", error);
+          const derived = diagnosticEngine.deriveConceptAndPrinciple(customQuestion);
+          diagnosis = diagnosticEngine.analyzeSemantics(customQuestion, answer, reasoning, derived);
         }
 
         if (!diagnosis) {
-          this.showToast("Analysis unavailable. Please try again.");
-          return;
+          const derived = diagnosticEngine.deriveConceptAndPrinciple(customQuestion);
+          diagnosis = diagnosticEngine.analyzeSemantics(customQuestion, answer, reasoning, derived);
         }
 
         this.currentDiagnosis = diagnosis;
@@ -6245,8 +6256,16 @@ Confidence: "${confidence || 'unspecified'}"`;
 
         this.renderDiagnosis(diagnosis, finalQData, answer, reasoning);
       } catch (error) {
-        console.error(error);
-        this.showToast("Analysis unavailable. Please try again.");
+        console.error("Practice submit error:", error);
+        try {
+          const derived = diagnosticEngine.deriveConceptAndPrinciple(customQuestion);
+          const fallbackDiag = diagnosticEngine.analyzeSemantics(customQuestion, answer, reasoning, derived);
+          const finalQData = QUESTION_BANK[this.currentQuestionId] || { concept: fallbackDiag.concept, socraticStages: [] };
+          this.renderDiagnosis(fallbackDiag, finalQData, answer, reasoning);
+        } catch (renderErr) {
+          console.error("Fallback render error:", renderErr);
+          this.showToast("Analysis unavailable. Please try again.");
+        }
       } finally {
         this.isSubmittingPractice = false;
         this.setIsAnalyzing(false);
