@@ -269,8 +269,8 @@ MisconceptionOS has been verified across the 8 required diagnostic and pedagogic
 
 ## GitHub Repository
 GitHub Repository:  
-[ADD FINAL GITHUB REPOSITORY URL]  
-*(Note: Please update this placeholder with your public GitHub repository URL prior to final submission).*
+https://github.com/navaneethan74/MisconceptionOS  
+*(Public Repository: AI-powered diagnostic system that analyzes student reasoning, detects misconceptions, and verifies learning recovery).*
 
 ## Demo / Live Application
 Demo URL:  
