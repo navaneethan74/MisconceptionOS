@@ -1,36 +1,7 @@
 # MisconceptionOS
 
 ## Team
-
-### Insight Innovation
-
-#### Team Leader
-- **Name:** Navaneethan VK
-- **Phone:** 9141604043
-- **Email:** navaneethan7407@gmail.com
-- **College:** Bannari Amman Institute of Technology
-- **Department:** Artificial Intelligence and Data Science
-
-#### Team Member 2
-- **Name:** Nakshatra S
-- **Phone:** 7397755959
-- **Email:** nakshatrasureshkumar@gmail.com
-- **College:** Bannari Amman Institute of Technology
-- **Department:** Artificial Intelligence and Data Science
-
-#### Team Member 3
-- **Name:** Kevin John Victor U
-- **Phone:** 6383666949
-- **Email:** kevinjv.u2k7@gmail.com
-- **College:** Bannari Amman Institute of Technology
-- **Department:** Computer Science and Engineering
-
-#### Team Member 4
-- **Name:** Kavya K
-- **Phone:** 7604905174
-- **Email:** kavyakanakaraj.2007@gmail.com
-- **College:** Bannari Amman Institute of Technology
-- **Department:** Computer Science and Engineering
+Insight Innovation
 
 
 ## Overview
@@ -206,7 +177,7 @@ To run MisconceptionOS locally:
 
 1. **Clone the repository**:
    ```bash
-   git clone [INSERT PUBLIC GITHUB URL HERE]
+   git clone https://github.com/navaneethan74/MisconceptionOS
    cd misconceptionos
    ```
 
@@ -298,18 +269,42 @@ MisconceptionOS has been verified across the 8 required diagnostic and pedagogic
 - **Client-Side Persistence**: IndexedDB data is persistent per browser instance. Clearing browser application cache resets local state unless synced to an external database.
 
 ## GitHub Repository
-GitHub Repository:  
-https://github.com/navaneethan74/MisconceptionOS  
-*(Public Repository: AI-powered diagnostic system that analyzes student reasoning, detects misconceptions, and verifies learning recovery).*
+https://github.com/navaneethan74/MisconceptionOS
 
 ## Demo / Live Application
-Demo URL:  
-[INSERT DEPLOYED APPLICATION URL HERE (e.g., GitHub Pages or Vercel)]  
-*(Note: Please update this placeholder with your live deployed URL if available).*
+- **Live Repository:** https://github.com/navaneethan74/MisconceptionOS
+- **Local Application:** `http://localhost:8080` (Run with `npm start` or `python -m http.server 8080`)
 
-## Team Summary
-- **Team Name:** Insight Innovation
-- **Leader:** Navaneethan VK (AI & DS)
-- **Members:** Nakshatra S (AI & DS), Kevin John Victor U (CSE), Kavya K (CSE)
-- **Institution:** Bannari Amman Institute of Technology
+## Team Members
+
+- **Team:** Insight Innovation
+
+### Team Leader
+- **Name:** Navaneethan VK
+- **Phone:** 9141604043
+- **Email:** navaneethan7407@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Artificial Intelligence and Data Science
+
+### Team Member 2
+- **Name:** Nakshatra S
+- **Phone:** 7397755959
+- **Email:** nakshatrasureshkumar@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Artificial Intelligence and Data Science
+
+### Team Member 3
+- **Name:** Kevin John Victor U
+- **Phone:** 6383666949
+- **Email:** kevinjv.u2k7@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Computer Science and Engineering
+
+### Team Member 4
+- **Name:** Kavya K
+- **Phone:** 7604905174
+- **Email:** kavyakanakaraj.2007@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Computer Science and Engineering
+
 
