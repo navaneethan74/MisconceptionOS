@@ -1,7 +1,37 @@
 # MisconceptionOS
 
 ## Team
-Insight Innovation
+
+### Insight Innovation
+
+#### Team Leader
+- **Name:** Navaneethan VK
+- **Phone:** 9141604043
+- **Email:** navaneethan7407@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Artificial Intelligence and Data Science
+
+#### Team Member 2
+- **Name:** Nakshatra S
+- **Phone:** 7397755959
+- **Email:** nakshatrasureshkumar@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Artificial Intelligence and Data Science
+
+#### Team Member 3
+- **Name:** Kevin John Victor U
+- **Phone:** 6383666949
+- **Email:** kevinjv.u2k7@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Computer Science and Engineering
+
+#### Team Member 4
+- **Name:** Kavya K
+- **Phone:** 7604905174
+- **Email:** kavyakanakaraj.2007@gmail.com
+- **College:** Bannari Amman Institute of Technology
+- **Department:** Computer Science and Engineering
+
 
 ## Overview
 **MisconceptionOS** is an intelligent pedagogical diagnostic system engineered to analyze student cognitive reasoning in college-level academic and technical subjects. Unlike traditional learning management systems that merely check whether a student selected the right answer or repeated key phrases, MisconceptionOS examines *why* a student arrived at their conclusion. By decoupling answer correctness from underlying mental models, the platform identifies root misconceptions, knowledge gaps, and reasoning gaps, provides adaptive Socratic intervention, and verifies durable cognitive recovery through independent transfer challenges.
@@ -277,6 +307,9 @@ Demo URL:
 [INSERT DEPLOYED APPLICATION URL HERE (e.g., GitHub Pages or Vercel)]  
 *(Note: Please update this placeholder with your live deployed URL if available).*
 
-## Team Members
-- **Team**: Insight Innovation
-- Team Members: `[INSERT TEAM MEMBER NAMES HERE PRIOR TO SUBMISSION]`
+## Team Summary
+- **Team Name:** Insight Innovation
+- **Leader:** Navaneethan VK (AI & DS)
+- **Members:** Nakshatra S (AI & DS), Kevin John Victor U (CSE), Kavya K (CSE)
+- **Institution:** Bannari Amman Institute of Technology
+
